@@ -71,28 +71,20 @@ class Tasks:
 
 		def get_data_from_kwrags(data):
 			N = int(data[0])
-			while N <= len(data) - 1:
-				execute(N, [check_type(i) for i in data[1:N + 1]])
+			if N > len(data) - 1:
+				print('Missing argument. Waiting: "{0}", received: {1}\nAborted!'.format(N, len(data) - 1))
+				exit(1)
 
-				if N == len(data) - 1:
-					if self.DEBUG:
-						print('Done.')
-					exit(0)
+			execute(N, [check_type(i) for i in data[1:N + 1]])
 
-				data = data[N + 1:]
-				N = int(data[0])
-				if N > len(data) - 1:
-					print('Missing argument. Waiting: "{0}", received: {1}\nAborted!'.format(N, len(data) - 1))
-					exit(1)
+			if self.DEBUG:
+				print('Done.')
+
 
 		def get_input_from_keyboard():
 			data = []
 			N = None
 			for line in sys.stdin:
-				if line == '\n':
-					if self.DEBUG:
-						print('Aborted!')
-					break
 
 				for elem in line.split():
 					if N:
@@ -100,26 +92,40 @@ class Tasks:
 					else:
 						N = int(check_type(elem))
 
-				if N == len(data):
-					execute(N, data)
+				if N <= len(data):
+					execute(N, data[:N])
 					if self.DEBUG:
 						print('N=', N, 'Data=', data)
 					N = None
 					data = []
+					break  # for stopping read next data
 
-			# # Old input type
-			# while True:
-			# 	data = []
-			#
-			# 	N = int(check_type(input('{pronoun}'.format(pronoun='Enter N:' if self.DEBUG else ''))))
-			#
-			# 	if self.DEBUG:
-			# 		print('N received. Waiting {} data input...'.format(N))
-			#
-			# 	for step in range(0, N):
-			# 		inputData = check_type(input())
-			# 		data.append(inputData)
-			# 	execute(N, data)
+		# def minimal_func():
+		# 	N = int(sys.stdin.readline())
+		#
+		# 	numbers = []
+		# 	for i in range(N):
+		# 		numbers.append(float(sys.stdin.readline()))
+		#
+		# 	s = sum(numbers)
+		#
+		# 	for p in map(lambda x: x / s, numbers):
+		# 		print('{:.3f}'.format(p))
+
+		# def get_input_from_keyboard():
+		# # Old input type
+		# while True:
+		# 	data = []
+		#
+		# 	N = int(check_type(input('{pronoun}'.format(pronoun='Enter N:' if self.DEBUG else ''))))
+		#
+		# 	if self.DEBUG:
+		# 		print('N received. Waiting {} data input...'.format(N))
+		#
+		# 	for step in range(0, N):
+		# 		inputData = check_type(input())
+		# 		data.append(inputData)
+		# 	execute(N, data)
 
 		if values:
 			get_data_from_kwrags(values)
@@ -183,7 +189,8 @@ class Tasks:
 							Solutions[x + Sizes[i]] = Solutions[x] + [i]
 
 			indexes = Solutions[
-				(list(Matrix.keys())[list(Matrix.values()).index(max(Matrix.values()))])]  # python3 get val from key by max(value)
+				(list(Matrix.keys())[
+					 list(Matrix.values()).index(max(Matrix.values()))])]  # python3 get val from key by max(value)
 			return indexes, max(Matrix.values())
 
 		def get_ye(val):
