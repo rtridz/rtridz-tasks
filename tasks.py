@@ -40,6 +40,7 @@ class Tasks:
 		"""
 
 		def execute(N, data):
+			from fractions import Fraction
 			if self.DEBUG:
 				print('Input data:', '\nN={0}'.format(N), 'data={0}'.format(data), '\n')
 
@@ -49,15 +50,15 @@ class Tasks:
 
 			if self.DEBUG:
 				print('Output:')
+
 			for val in data:
-				print(format(val / summary, '.3f'))
+				fr_num = Fraction(val) / Fraction(summary)
+				print(format(round(fr_num.numerator / fr_num.denominator, 3), '.3f'))
+
 			if self.DEBUG:
 				print('\n')
 
 		def check_type(data):
-			if data == "Q" or data == 'q':
-				print('Done.')
-				exit(1)
 			try:
 				data = float(data)
 			except ValueError:
@@ -99,33 +100,6 @@ class Tasks:
 					N = None
 					data = []
 					break  # for stopping read next data
-
-		# def minimal_func():
-		# 	N = int(sys.stdin.readline())
-		#
-		# 	numbers = []
-		# 	for i in range(N):
-		# 		numbers.append(float(sys.stdin.readline()))
-		#
-		# 	s = sum(numbers)
-		#
-		# 	for p in map(lambda x: x / s, numbers):
-		# 		print('{:.3f}'.format(p))
-
-		# def get_input_from_keyboard():
-		# # Old input type
-		# while True:
-		# 	data = []
-		#
-		# 	N = int(check_type(input('{pronoun}'.format(pronoun='Enter N:' if self.DEBUG else ''))))
-		#
-		# 	if self.DEBUG:
-		# 		print('N received. Waiting {} data input...'.format(N))
-		#
-		# 	for step in range(0, N):
-		# 		inputData = check_type(input())
-		# 		data.append(inputData)
-		# 	execute(N, data)
 
 		if values:
 			get_data_from_kwrags(values)
